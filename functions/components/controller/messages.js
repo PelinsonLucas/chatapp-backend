@@ -56,13 +56,14 @@ router.get('/get/:messageid', (req, res) => {
 
 router.post('/new',  (req, res) => {
     const dbMessage = req.body;
+    var username = "";
 
     try{
         const decoded = jwt.verify(req.headers.authorization, '12an31!ksSk1Y7');
-
+        username = decoded.username;
         Messages.create(dbMessage)
         .then((data) => {
-            chats.findOne({_id: data.chatid })
+            chats.findById(data.chatid)
             .then((chat) => {
                 chat.lastMessageId = data._id;
                 chat.save();

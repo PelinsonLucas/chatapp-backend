@@ -20,7 +20,6 @@ const pusher = new Pusher({
   });
 
 const connectURL = "mongodb+srv://admin:zjxEicdc2FQM20TF@cluster0.wuy3nrc.mongodb.net/ChatApp?retryWrites=true&w=majority";
-
 mongoose.set('strictQuery', false);
 mongoose.connect(connectURL, {
     useNewUrlParser: true,
@@ -37,7 +36,7 @@ db.once("open", () => {
     changeStream.on("change", (change) => {
         if (change.operationType === "insert") {
             const messageDetails = change.fullDocument;
-            dbChats.findById({_id: messageDetails.chatid})
+            dbChats.findById(messageDetails.chatid)
             .then((chat) => {
                 pusher.trigger("messages", "inserted", {
                     users: chat.users,
