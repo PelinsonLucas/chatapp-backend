@@ -60,4 +60,4 @@ app.use("/chats", chats);
 
 app.get("/", (req, res) => res.status(200).send("Hello World!"));
 
-exports.app = onRequest(app);
+exports.app = onRequest({memory: "512MiB"}, app);

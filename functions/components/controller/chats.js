@@ -36,6 +36,30 @@ router.post('/new',  (req, res) => {
 
 });
 
+router.get('/get/:id',  (req, res) => {
+    const id = req.params.id;
+
+    try{
+        const decoded = jwt.verify(req.headers.authorization, '12an31!ksSk1Y7');
+        var username = decoded.username;
+    }catch(err){
+        res.status(500).send(err);
+        return 0;
+    };
+
+    user.findOne({username: username})
+    .then((user) => {
+        chats.findById(id)
+        .then((chat) => {
+            if(chat.users.includes(username) && user.chats.includes(id))
+                res.status(200).send(chat);
+            res.status(500).send("Not in chat");
+        })
+        .catch((error) => res.status(500).send(error));
+    })
+    .catch((error) => { console.log(error)})
+});
+
 router.get('/sync',  (req, res) => {
 
     try{
